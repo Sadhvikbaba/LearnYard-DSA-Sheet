@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int l = 0, r = 0;
+        vector<int> hash(256, 0);
+        for(char c : t){
+            hash[c]++;
+        }
+
+        int count = 0;
+        int minLen = INT_MAX;
+        int sIndex = -1;
+
+        while(r < s.size()){
+            if(hash[s[r]] > 0)count++;
+            hash[s[r]]--;
+
+            while(count == t.size()){
+                int len = r - l + 1;
+                if(len < minLen){
+                    minLen = len;
+                    sIndex = l;
+                }
+                hash[s[l]]++;
+                if(hash[s[l]] > 0)count--;
+                l++;
+            }
+            r++;
+        }
+        return sIndex == -1 ? "" : s.substr(sIndex, minLen);
+    }
+};
